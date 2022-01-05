@@ -13,7 +13,9 @@
 import { getGame, CONDITIONAL_VISIBILITY_MODULE_NAME, registerSettings } from './module/settings';
 import { preloadTemplates } from './module/preloadTemplates';
 import { ConditionalVisibility } from './module/ConditionalVisibility';
-import { readyHooks } from './module/Hooks';
+import { initHooks, readyHooks } from './module/Hooks';
+import EffectInterface from './module/effects/effect-interface';
+import StatusEffects from './module/effects/status-effects';
 
 declare global {
   interface Window {
@@ -59,6 +61,7 @@ Hooks.once('init', async function () {
   await preloadTemplates();
 
   // Register custom sheets (if any)
+  initHooks();
 });
 
 Hooks.once('socketlib.ready', () => {
@@ -76,7 +79,34 @@ Hooks.once('setup', function () {});
 /* ------------------------------------ */
 Hooks.once('ready', async function () {
   // Do anything once the module is ready
+  if (!getGame().modules.get('lib-wrapper')?.active && getGame().user?.isGM) {
+    ui.notifications?.error(
+      `The '${CONDITIONAL_VISIBILITY_MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`,
+    );
+    return;
+  }
+  if (!getGame().modules.get('socketlib')?.active && getGame().user?.isGM) {
+    ui.notifications?.error(
+      `The '${CONDITIONAL_VISIBILITY_MODULE_NAME}' module requires to install and activate the 'socketlib' module.`,
+    );
+    return;
+  }
   readyHooks();
+});
+
+// Add any additional hooks if necessary
+
+Hooks.once('socketlib.ready', () => {
+  getGame()[CONDITIONAL_VISIBILITY_MODULE_NAME] = getGame()[CONDITIONAL_VISIBILITY_MODULE_NAME] || {};
+
+  // getGame()[CONDITIONAL_VISIBILITY_MODULE_NAME].effects = new EffectDefinitions();
+  getGame()[CONDITIONAL_VISIBILITY_MODULE_NAME].effectInterface = new EffectInterface(
+    CONDITIONAL_VISIBILITY_MODULE_NAME,
+  );
+  getGame()[CONDITIONAL_VISIBILITY_MODULE_NAME].statusEffects = new StatusEffects(
+    CONDITIONAL_VISIBILITY_MODULE_NAME
+  );
+  getGame()[CONDITIONAL_VISIBILITY_MODULE_NAME].effectInterface.initialize();
 });
 
 Hooks.once('libChangelogsReady', function () {

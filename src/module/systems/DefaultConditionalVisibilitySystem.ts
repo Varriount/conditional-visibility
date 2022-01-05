@@ -147,11 +147,11 @@ export class DefaultConditionalVisibilitySystem implements ConditionalVisibility
 
   getVisionCapabilities(srcToken: Array<Token> | Token): VisionCapabilities {
     const flags: VisionCapabilities = new VisionCapabilities();
-    if (srcToken){
+    if (srcToken) {
       //In case of sending an array only take the first element
       srcToken = srcToken instanceof Array ? srcToken[0] : srcToken;
     }
-    if (srcToken){
+    if (srcToken) {
       let _seeinvisible =
         <number>(
           srcToken?.data?.document?.getFlag(CONDITIONAL_VISIBILITY_MODULE_NAME, StatusEffectSightFlags.SEE_INVISIBLE)

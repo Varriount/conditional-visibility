@@ -4,6 +4,8 @@ import { getGame, getCanvas, CONDITIONAL_VISIBILITY_MODULE_NAME } from './settin
 
 export const readyHooks = async (): Promise<void> => {
   // setup all the hooks
+  getGame()[CONDITIONAL_VISIBILITY_MODULE_NAME].statusEffects.initializeStatusEffects();
+
   log(' Ready ' + CONDITIONAL_VISIBILITY_MODULE_NAME);
   const sightLayer = getCanvas().layers.find((layer) => {
     switch (getGame().system.id) {
@@ -75,4 +77,5 @@ export const readyHooks = async (): Promise<void> => {
 
 export const initHooks = (): void => {
   warn('Init Hooks processing');
+  ConditionalVisibility.onInit();
 };

@@ -62,8 +62,8 @@ export function getGame(): Game {
 
 export const registerSettings = function (): void {
   getGame().settings.register(CONDITIONAL_VISIBILITY_MODULE_NAME, 'autoStealth', {
-    name: getGame().i18n.localize('conditional-visibility.settings.autoStealth.name'),
-    hint: getGame().i18n.localize('conditional-visibility.settings.autoStealth.hint'),
+    name: getGame().i18n.localize(`${CONDITIONAL_VISIBILITY_MODULE_NAME}.settings.autoStealth.name`),
+    hint: getGame().i18n.localize(`${CONDITIONAL_VISIBILITY_MODULE_NAME}.settings.autoStealth.hint`),
     scope: 'world',
     config: true,
     type: Boolean,
@@ -71,13 +71,13 @@ export const registerSettings = function (): void {
     onChange: (value) => log(' autoStealth set to ' + value),
   });
 
-  getGame().settings.register(CONDITIONAL_VISIBILITY_MODULE_NAME, 'popup-version', {
-    scope: 'world',
-    config: false,
-    type: String,
-    default: '0.0.9',
-  });
+  // getGame().settings.register(CONDITIONAL_VISIBILITY_MODULE_NAME, 'popup-version', {
+  //   scope: 'world',
+  //   config: false,
+  //   type: String,
+  //   default: '0.0.9',
+  // });
 
   // Register any custom module settings here
-  ConditionalVisibility.onInit();
+  // ConditionalVisibility.onInit();
 };
